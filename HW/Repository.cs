@@ -28,19 +28,20 @@ namespace HW
         /// <summary>
         /// Вывести всех из файла в консоль
         /// </summary>
-        public void GetAllWorkers()
+        public List<string> GetAllWorkers()
         {
             List<string> result = FileToArr(path);
 
-            foreach (var stringArr in result)
-            {
-                string[] resStr = stringArr.Split('#');
-                foreach (string item in resStr)
-                {
-                    Console.Write($">>{item}");
-                }
-                Console.WriteLine();
-            }
+            //foreach (var stringArr in result)
+            //{
+            //    string[] resStr = stringArr.Split('#');
+            //    foreach (string item in resStr)
+            //    {
+            //        Console.Write($">>{item}");
+            //    }
+            //    Console.WriteLine();
+            //}
+            return result;
         }
 
         /// <summary>

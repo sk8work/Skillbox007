@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HW
 {
@@ -45,7 +46,7 @@ namespace HW
                         r.AddWorker();
                         break;
                     case '2':
-                        string deleteChoice = String.Empty;
+                        string deleteChoice;
                         Console.WriteLine("Введите ID для удаления сотрудника. q - для выхода в меню.");
                         deleteChoice = Console.ReadLine();
                         if (deleteChoice == "q")
@@ -55,10 +56,11 @@ namespace HW
                         r.DeleteWorker(Convert.ToInt32(deleteChoice));
                         break;
                     case '3':
-                        r.GetAllWorkers();
+                        List<string> getAllWorkers = r.GetAllWorkers();
+                        r.Printer(getAllWorkers);
                         break;
                     case '4':
-                        string IDChoice = String.Empty;
+                        string IDChoice;
                         Console.WriteLine("Введите ID для вывода сотрудника на экран. q - для выхода в меню.");
                         IDChoice = Console.ReadLine();
                         if (IDChoice == "q")
