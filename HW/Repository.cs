@@ -1,17 +1,4 @@
-﻿//0#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//1#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-//2#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//3#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-//4#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//5#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-//6#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//7#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-//8#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//9#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-//10#03.11.2022 0:24:20#qwrafa#15#32#10.10.2002#gfhgfjk
-//11#04.11.2022 13:10:07#rgdfhd#26#200#12.12.2002#cgmhgjk
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;

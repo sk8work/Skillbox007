@@ -1,12 +1,4 @@
-﻿//ID - авто
-//Дата и время добавления записи - авто
-//Ф.И.О.
-//Возраст
-//Рост
-//Дата рождения
-//Место рождения
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
