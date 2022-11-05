@@ -25,23 +25,62 @@ namespace HW
         public static int ID = 0;
         public static string path = "workers.txt";
 
+        public List<Worker> allWorkers = new List<Worker>();
+
+        /// <summary>
+        /// Проверяет, существует ли файл
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool IsFileExist(string path)
+        {
+            return File.Exists(path);
+        }
+
+        /// <summary>
+        /// Проверяет, не пустой ли файл
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool IsFileNotEmpty(string path)
+        {
+            bool flag = false;
+            using (StreamReader sr = new StreamReader(path))
+            {
+                if (sr.ReadToEnd() != string.Empty)
+                {
+                    flag = true;
+                }
+            }
+            return flag;
+        }
+
         /// <summary>
         /// Вывести всех из файла в консоль
         /// </summary>
-        public List<string> GetAllWorkers()
+        public List<Worker> GetAllWorkers()
         {
-            List<string> result = FileToArr(path);
+            if (IsFileExist(path) && IsFileNotEmpty(path))
+            {
+                List<string> result = FileToArr(path);
+                for (int i = 0; i < result.Count; i++)
+                {
+                    string[] str    = result[i].Split('#');
+                    Worker w        = new Worker();
 
-            //foreach (var stringArr in result)
-            //{
-            //    string[] resStr = stringArr.Split('#');
-            //    foreach (string item in resStr)
-            //    {
-            //        Console.Write($">>{item}");
-            //    }
-            //    Console.WriteLine();
-            //}
-            return result;
+                    w.Id                = str[0];
+                    w.DateTimeInsert    = DateTime.Parse(str[1]);
+                    w.FIO               = str[2];
+                    w.Age               = str[3];
+                    w.Height            = str[4];
+                    w.BDate             = DateTime.Parse(str[5]);
+                    w.BPlace            = str[6];
+
+                    this.allWorkers.Add(w);
+
+                }
+            }
+            return allWorkers;
         }
 
         /// <summary>
@@ -51,17 +90,17 @@ namespace HW
         /// <returns></returns>
         public string GetWorkerById(int ID)
         {
-            string res = String.Empty;
-            List<string> result = FileToArr(path);
-            foreach (var item in result)
+            List<Worker> allWorkers = GetAllWorkers();
+            string note = "Записи с таким ID не найдено. Повторите запрос..";
+            foreach (Worker item in allWorkers)
             {
-                string[] toFind = item.Split('#');
-                if (Convert.ToInt32(toFind[0]) == ID)
+                if (item.Id == ID.ToString())
                 {
-                    return string.Join(" ", toFind);
+                    note = $"{item.Id} >> {item.DateTimeInsert} >> {item.FIO} >> {item.Age} >> {item.Height} >> {item.BDate.ToShortDateString()} >> {item.BPlace}";
+                    return note;
                 }
             }
-            return "Записи с таким ID не обнаружено. Повторите запрос";
+            return note;
         }
 
         /// <summary>
@@ -70,24 +109,16 @@ namespace HW
         /// <param name="ID"></param>
         public void DeleteWorker(int ID)
         {
-            List<string> result = FileToArr(path);
-
-            foreach (var item in result)
-            {
-                string[] toFind = item.Split('#');
-                if (int.Parse(toFind[0]) == ID)
-                {
-                    Console.WriteLine(item);
-                    result.Remove(item);
-                    break;
-                }
-            }
+            List<Worker> allWorkers = GetAllWorkers();
+            allWorkers.RemoveAll(w => w.Id == ID.ToString());
 
             using (StreamWriter sr = new StreamWriter(path, false))
             {
-                foreach (var item in result)
+                string note;
+                foreach (var w in allWorkers)
                 {
-                    sr.WriteLine(item);
+                    note = w.Id.ToString() + "#" + w.DateTimeInsert + "#" + w.FIO + "#" + w.Age + "#" + w.Height + "#" + w.BDate.ToShortDateString() + "#" + w.BPlace;
+                    sr.WriteLine(note);
                 }
             }
         }
@@ -95,8 +126,8 @@ namespace HW
         /// <summary>
         /// Читает файл и записывает в массив
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
+        /// <param name = "" ></ param >
+        /// < returns ></ returns >
         public List<string> FileToArr(string path)
         {
             List<string> result = new List<string>();
@@ -107,7 +138,7 @@ namespace HW
                     result.Add(sr.ReadLine());
                 }
             }
-            return result;      
+            return result;
         }
 
         /// <summary>
@@ -117,15 +148,9 @@ namespace HW
         /// <returns></returns>
         public int GetID(string path)
         {
-            int ID = 0;
+            List<Worker> allWorkers = GetAllWorkers();
+            int ID = int.Parse(allWorkers[allWorkers.Count - 1].Id) + 1;
             List<string> result =  FileToArr(path);
-            if (result.Count > 0)
-            {
-                string str = result[result.Count - 1];
-                string[] parts = str.Split("#");
-                ID = int.Parse(parts[0]) + 1;
-            }
-            
             return ID;
         }
 
@@ -134,7 +159,7 @@ namespace HW
         /// </summary>
         public void AddWorker()
         {
-            string note = String.Empty;
+            string note;
             Worker w = new Worker();
 
             ID = GetID(path);
@@ -173,14 +198,13 @@ namespace HW
         /// <param name="dateFrom"></param>
         /// <param name="dateTo"></param>
         /// <returns></returns>
-        public List<string> GetWorkersBetweenTwoDates(string dateFrom, string dateTo)
+        public List<Worker> GetWorkersBetweenTwoDates(string dateFrom, string dateTo)
         {
-            List<string> getAll = FileToArr(path);
-            List<string> selectedArr = new List<string>();
-            foreach (string item in getAll)
+            List<Worker> allWorkers = GetAllWorkers();
+            List<Worker> selectedArr = new List<Worker>();
+            foreach (var item in allWorkers)
             {
-                string[] itemToArr = item.Split('#');
-                if ( (Convert.ToDateTime(itemToArr[5]) > Convert.ToDateTime(dateFrom)) && (Convert.ToDateTime(itemToArr[5]) < Convert.ToDateTime(dateTo)) )
+                if ((item.BDate > Convert.ToDateTime(dateFrom)) && (item.BDate < Convert.ToDateTime(dateTo)))
                 {
                     selectedArr.Add(item);
                 }
@@ -192,17 +216,60 @@ namespace HW
         /// Распечатываем выборку
         /// </summary>
         /// <param name="arr"></param>
-        public void Printer(List<string> arr)
+        public void Printer(List<Worker> workers)
         {
-            foreach (var item in arr)
+            foreach (var item in workers)
             {
-                string[] row = item.Split('#');
-                foreach (string i in row)
-                {
-                    Console.Write($">>{i}");
-                }
-                Console.WriteLine();
+                Console.WriteLine($"{item.Id} >> {item.DateTimeInsert} >> {item.FIO} >> {item.Age} >> {item.Height} >> {item.BDate.ToShortDateString()} >> {item.BPlace}");
             }
+        }
+
+        /// <summary>
+        /// Возвращает отсортированный список по Id
+        /// </summary>
+        /// <returns></returns>
+        public List<Worker> SortByID()
+        {
+            List<Worker> allWorkers = GetAllWorkers();
+            List<Worker> newWorkers = new List<Worker>();
+            newWorkers = allWorkers.OrderBy(w => w.Id).ToList<Worker>();
+            return newWorkers;
+        }
+
+        /// <summary>
+        /// Возвращает отсортированный список по FIO
+        /// </summary>
+        /// <returns></returns>
+        public List<Worker> SortByFIO()
+        {
+            List<Worker> allWorkers = GetAllWorkers();
+            List<Worker> newWorkers = new List<Worker>();
+            newWorkers = allWorkers.OrderBy(w => w.FIO).ToList<Worker>();
+            return newWorkers;
+        }
+
+        /// <summary>
+        /// Возвращает отсортированный список по Дате рождения
+        /// </summary>
+        /// <returns></returns>
+        public List<Worker> SortByBDate()
+        {
+            List<Worker> allWorkers = GetAllWorkers();
+            List<Worker> newWorkers = new List<Worker>();
+            newWorkers = allWorkers.OrderBy(w => w.BDate).ToList<Worker>();
+            return newWorkers;
+        }
+
+        /// <summary>
+        /// Возвращает отсортированный список по месту рождения
+        /// </summary>
+        /// <returns></returns>
+        public List<Worker> SortByBPlace()
+        {
+            List<Worker> allWorkers = GetAllWorkers();
+            List<Worker> newWorkers = new List<Worker>();
+            newWorkers = allWorkers.OrderBy(w => w.BPlace).ToList<Worker>();
+            return newWorkers;
         }
     }
 }

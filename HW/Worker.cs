@@ -14,7 +14,7 @@ namespace HW
 {
     struct Worker
     {
-        //public string ID { get; set; }
+        public string Id { get; set; }
         public DateTime DateTimeInsert { get; set; }
         public string   FIO { get; set; }
         public string   Age { get; set; }

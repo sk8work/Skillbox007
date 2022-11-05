@@ -24,8 +24,13 @@ namespace HW
             Console.WriteLine("3 - Вывести список сотрудников");
             Console.WriteLine("4 - Вывести сотрудника по ID");
             Console.WriteLine("5 - Вывести список сотрудников из промужутка дат (по дате рождения)");
+            Console.WriteLine("6 - Отсортировать по ID");
+            Console.WriteLine("7 - Отсортировать по FIO");
+            Console.WriteLine("8 - Отсортировать по дате рождения");
+            Console.WriteLine("9 - Отсортировать по месту рождения");
             Console.WriteLine("q - Выйти из программы");
         }
+
 
         /// <summary>
         /// Start
@@ -56,7 +61,7 @@ namespace HW
                         r.DeleteWorker(Convert.ToInt32(deleteChoice));
                         break;
                     case '3':
-                        List<string> getAllWorkers = r.GetAllWorkers();
+                        List<Worker> getAllWorkers = r.GetAllWorkers();
                         r.Printer(getAllWorkers);
                         break;
                     case '4':
@@ -78,6 +83,22 @@ namespace HW
                         Console.WriteLine("Введите конечную дату.");
                         dateTo = Convert.ToDateTime(Console.ReadLine()).ToShortDateString();
                         r.Printer(r.GetWorkersBetweenTwoDates(dateFrom, dateTo));
+                        break;
+                    case '6':
+                        List<Worker> getSortByID = r.SortByID();
+                        r.Printer(getSortByID);
+                        break;
+                    case '7':
+                        List<Worker> getSortFIO = r.SortByFIO();
+                        r.Printer(getSortFIO);
+                        break;
+                    case '8':
+                        List<Worker> getSortBDate = r.SortByBDate();
+                        r.Printer(getSortBDate);
+                        break;
+                    case '9':
+                        List<Worker> getSortBPlace = r.SortByBPlace();
+                        r.Printer(getSortBPlace);
                         break;
                     case 'q':
                         start = false;
